@@ -49583,7 +49583,7 @@
     WorkExperienceEnum_entriesInitialized = true;
     WorkExperienceEnum_LUXOFT_instance = new WorkExperienceEnum('LUXOFT', 0, 'Senior Android Developer', 'Luxoft', '06/2021 - Present,', 'I was responsible for delivering a mobile app for Leroy Merlin. I created the whole UI/UX. I was also involved in networking and database development. The tech behind includes, but not limited to: Kotlin, Kotlin coroutines, ObjectBox for database, Jetpack Compose for UI, that I made, Retrofit2', arrayListOf(['develop whole UI via Jetpack Compose', 'work with database via ObjectBox', 'work with network via retrofit2']));
     WorkExperienceEnum_SPUTNIK_instance = new WorkExperienceEnum('SPUTNIK', 1, 'Middle Android Developer', 'Sputnic', '02/2019 - 06/2021,', 'I made an app installer as Play Market. I wrote this application under control of a Senior Android Developer. I made it from scratch. Also I worked on Sputnic browser. Tech stack: Kotlin, Kotlin coroutines for multithreading, Room for database, Koin for DI, MVVM architecture, Retrofit2 for network. Also in this project I worked with QR code scanning using ZXING and camera.', arrayListOf(['develop whole UI/UX', 'develop database via Room', 'develop networking via Retrofit2']));
-    WorkExperienceEnum_SPACE_instance = new WorkExperienceEnum('SPACE', 2, 'Android Developer', 'Spase1s', '09/2018 - 06/2021,', ' worked on application that control robots via bluetooth and WI-FI, I have created the whole app from scratch. The tech stack: Java, RxJava, Self-wrote database queries with SqlOpenHelper, Koin, MVVM. Also I worked in this project with sockets for scan network, made custom components extend from View.', arrayListOf(['develop application from zero', 'develop whole UI/UX', 'develop sockets to work bluetooth and Wi-Fi']));
+    WorkExperienceEnum_SPACE_instance = new WorkExperienceEnum('SPACE', 2, 'Android Developer', 'Spase1s', '09/2018 - 06/2021,', 'I worked on application that control robots via bluetooth and WI-FI, I have created the whole app from scratch. The tech stack: Java, RxJava, Self-wrote database queries with SqlOpenHelper, Koin, MVVM. Also I worked in this project with sockets for scan network, made custom components extend from View.', arrayListOf(['develop application from zero', 'develop whole UI/UX', 'develop sockets to work bluetooth and Wi-Fi']));
   }
   function WorkExperienceEnum(name, ordinal, position, company, period, responsible, tasks) {
     Enum.call(this, name, ordinal);
@@ -49808,14 +49808,14 @@
   }
   function MyApp$composable(content, $composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(1290874326);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(1290874376);
     sourceInformation($composer_0, 'C(MyApp$composable)');
     var $dirty = $changed;
     if (($changed & 14) === 0)
       $dirty = $dirty | ($composer_0.changed_wi7j7l_k$(content) ? 4 : 2);
     if (!(($dirty & 11 ^ 2) === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp = $composer_0;
-      SilkApp$composable(composableLambda(tmp, -819895435, true, _no_name_provided_$factory_327(content, $dirty)), $composer_0, 6);
+      SilkApp$composable(composableLambda(tmp, -819896157, true, _no_name_provided_$factory_327(content, $dirty)), $composer_0, 6);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
     var tmp0_safe_receiver = $composer_0.endRestartGroup_0_k$();
@@ -49967,7 +49967,7 @@
       LaunchedEffect$composable(colorMode, tmp$ret$3, $composer_0, 0);
       var tmp_1 = minHeight_0(Companion_getInstance_38(), _get_vh_(100));
       var tmp_2 = $composer_0;
-      Surface$composable(tmp_1, null, null, composableLambda(tmp_2, -819896242, true, _no_name_provided_$factory_330(this._$content_23, this._$$dirty_9)), $composer_0, 3072, 6);
+      Surface$composable(tmp_1, null, null, composableLambda(tmp_2, -819896196, true, _no_name_provided_$factory_330(this._$content_23, this._$$dirty_9)), $composer_0, 3072, 6);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
   };
