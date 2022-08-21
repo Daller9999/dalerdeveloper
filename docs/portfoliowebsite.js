@@ -61,6 +61,12 @@
   LinkedHashMap.prototype.constructor = LinkedHashMap;
   LinkedHashSet.prototype = Object.create(HashSet.prototype);
   LinkedHashSet.prototype.constructor = LinkedHashSet;
+  NodeJsOutput_0.prototype = Object.create(BaseOutput.prototype);
+  NodeJsOutput_0.prototype.constructor = NodeJsOutput_0;
+  BufferedOutput_0.prototype = Object.create(BaseOutput.prototype);
+  BufferedOutput_0.prototype.constructor = BufferedOutput_0;
+  BufferedOutputToConsoleLog_0.prototype = Object.create(BufferedOutput_0.prototype);
+  BufferedOutputToConsoleLog_0.prototype.constructor = BufferedOutputToConsoleLog_0;
   Exception.prototype = Object.create(Error.prototype);
   Exception.prototype.constructor = Exception;
   RuntimeException.prototype = Object.create(Exception.prototype);
@@ -6284,6 +6290,147 @@
     kind: 'interface',
     interfaces: []
   };
+  var output;
+  function BaseOutput() {
+  }
+  BaseOutput.prototype.println_sv8swh_k$ = function () {
+    this.print_qi8yb4_k$('\n');
+  };
+  BaseOutput.prototype.println_qi8yb4_k$ = function (message) {
+    this.print_qi8yb4_k$(message);
+    this.println_sv8swh_k$();
+  };
+  BaseOutput.$metadata$ = {
+    simpleName: 'BaseOutput',
+    kind: 'class',
+    interfaces: []
+  };
+  function NodeJsOutput_0(outputStream) {
+    BaseOutput.call(this);
+    this._outputStream = outputStream;
+  }
+  NodeJsOutput_0.prototype.print_qi8yb4_k$ = function (message) {
+    var tmp$ret$0;
+    $l$block: {
+      tmp$ret$0 = String(message);
+      break $l$block;
+    }
+    var messageString = tmp$ret$0;
+    this._outputStream.write(messageString);
+  };
+  NodeJsOutput_0.$metadata$ = {
+    simpleName: 'NodeJsOutput',
+    kind: 'class',
+    interfaces: []
+  };
+  function BufferedOutputToConsoleLog_0() {
+    BufferedOutput_0.call(this);
+  }
+  BufferedOutputToConsoleLog_0.prototype.print_qi8yb4_k$ = function (message) {
+    var tmp$ret$0;
+    $l$block: {
+      tmp$ret$0 = String(message);
+      break $l$block;
+    }
+    var s = tmp$ret$0;
+    var tmp$ret$2;
+    $l$block_1: {
+      var tmp0_nativeLastIndexOf_0 = s;
+      var tmp$ret$1;
+      $l$block_0: {
+        tmp$ret$1 = tmp0_nativeLastIndexOf_0;
+        break $l$block_0;
+      }
+      tmp$ret$2 = tmp$ret$1.lastIndexOf('\n', 0);
+      break $l$block_1;
+    }
+    var i = tmp$ret$2;
+    if (i >= 0) {
+      var tmp0_this = this;
+      var tmp = tmp0_this._get_buffer__0_k$();
+      var tmp$ret$4;
+      $l$block_3: {
+        var tmp1_substring_0 = s;
+        var tmp$ret$3;
+        $l$block_2: {
+          tmp$ret$3 = tmp1_substring_0;
+          break $l$block_2;
+        }
+        tmp$ret$4 = tmp$ret$3.substring(0, i);
+        break $l$block_3;
+      }
+      tmp0_this._set_buffer__a4enbm_k$(tmp + tmp$ret$4);
+      this.flush_sv8swh_k$();
+      var tmp$ret$6;
+      $l$block_5: {
+        var tmp2_substring_0 = s;
+        var tmp3_substring_0 = i + 1 | 0;
+        var tmp$ret$5;
+        $l$block_4: {
+          tmp$ret$5 = tmp2_substring_0;
+          break $l$block_4;
+        }
+        tmp$ret$6 = tmp$ret$5.substring(tmp3_substring_0);
+        break $l$block_5;
+      }
+      s = tmp$ret$6;
+    }var tmp1_this = this;
+    tmp1_this._set_buffer__a4enbm_k$(tmp1_this._get_buffer__0_k$() + s);
+  };
+  BufferedOutputToConsoleLog_0.prototype.flush_sv8swh_k$ = function () {
+    console.log(this._get_buffer__0_k$());
+    this._set_buffer__a4enbm_k$('');
+  };
+  BufferedOutputToConsoleLog_0.$metadata$ = {
+    simpleName: 'BufferedOutputToConsoleLog',
+    kind: 'class',
+    interfaces: []
+  };
+  function BufferedOutput_0() {
+    BaseOutput.call(this);
+    this._buffer = '';
+  }
+  BufferedOutput_0.prototype._set_buffer__a4enbm_k$ = function (_set___) {
+    this._buffer = _set___;
+  };
+  BufferedOutput_0.prototype._get_buffer__0_k$ = function () {
+    return this._buffer;
+  };
+  BufferedOutput_0.prototype.print_qi8yb4_k$ = function (message) {
+    var tmp0_this = this;
+    var tmp = tmp0_this;
+    var tmp_0 = tmp0_this._buffer;
+    var tmp$ret$0;
+    $l$block: {
+      tmp$ret$0 = String(message);
+      break $l$block;
+    }
+    tmp._buffer = tmp_0 + tmp$ret$0;
+  };
+  BufferedOutput_0.$metadata$ = {
+    simpleName: 'BufferedOutput',
+    kind: 'class',
+    interfaces: []
+  };
+  function println(message) {
+    output.println_qi8yb4_k$(message);
+  }
+  function output$init$() {
+    var tmp$ret$1;
+    $l$block_0: {
+      {
+      }
+      var tmp$ret$0;
+      $l$block: {
+        var isNode_2 = typeof process !== 'undefined' && process.versions && !!process.versions.node;
+        tmp$ret$0 = isNode_2 ? new NodeJsOutput_0(process.stdout) : new BufferedOutputToConsoleLog_0();
+        break $l$block;
+      }
+      tmp$ret$1 = tmp$ret$0;
+      break $l$block_0;
+    }
+    return tmp$ret$1;
+  }
   function SafeContinuation_init_$Init$(delegate, $this) {
     SafeContinuation.call($this, delegate, CoroutineSingletons_UNDECIDED_getInstance());
     return $this;
@@ -26405,7 +26552,7 @@
   };
   function BufferIterator(buffer, index, size_1) {
     AbstractListIterator.call(this, index, size_1);
-    this._buffer = buffer;
+    this._buffer_0 = buffer;
   }
   BufferIterator.prototype.next_0_k$ = function () {
     if (!this.hasNext_0_k$()) {
@@ -26413,14 +26560,14 @@
     }var tmp0_this = this;
     var tmp1 = tmp0_this._get_index__0_k$();
     tmp0_this._set_index__majfzk_k$(tmp1 + 1 | 0);
-    return this._buffer[tmp1];
+    return this._buffer_0[tmp1];
   };
   BufferIterator.prototype.previous_0_k$ = function () {
     if (!this.hasPrevious_0_k$()) {
       throw NoSuchElementException_init_$Create$();
     }var tmp0_this = this;
     tmp0_this._set_index__majfzk_k$(tmp0_this._get_index__0_k$() - 1 | 0);
-    return this._buffer[tmp0_this._get_index__0_k$()];
+    return this._buffer_0[tmp0_this._get_index__0_k$()];
   };
   BufferIterator.$metadata$ = {
     simpleName: 'BufferIterator',
@@ -27478,23 +27625,23 @@
   function SmallPersistentVector(buffer) {
     Companion_getInstance_10();
     AbstractPersistentList.call(this);
-    this._buffer_0 = buffer;
-    assert(this._buffer_0.length <= 32);
+    this._buffer_1 = buffer;
+    assert(this._buffer_1.length <= 32);
   }
   SmallPersistentVector.prototype._get_size__0_k$ = function () {
-    return this._buffer_0.length;
+    return this._buffer_1.length;
   };
   SmallPersistentVector.prototype.add_2bq_k$ = function (element) {
     if (this._get_size__0_k$() < 32) {
-      var newBuffer = copyOf_0(this._buffer_0, this._get_size__0_k$() + 1 | 0);
+      var newBuffer = copyOf_0(this._buffer_1, this._get_size__0_k$() + 1 | 0);
       newBuffer[this._get_size__0_k$()] = element;
       return new SmallPersistentVector(newBuffer);
     }var tail = presizedBufferWith(element);
-    return new PersistentVector(this._buffer_0, tail, this._get_size__0_k$() + 1 | 0, 0);
+    return new PersistentVector(this._buffer_1, tail, this._get_size__0_k$() + 1 | 0, 0);
   };
   SmallPersistentVector.prototype.addAll_dxd4eo_k$ = function (elements) {
     if ((this._get_size__0_k$() + elements._get_size__0_k$() | 0) <= 32) {
-      var newBuffer = copyOf_0(this._buffer_0, this._get_size__0_k$() + elements._get_size__0_k$() | 0);
+      var newBuffer = copyOf_0(this._buffer_1, this._get_size__0_k$() + elements._get_size__0_k$() | 0);
       var index = this._get_size__0_k$();
       var tmp0_iterator = elements.iterator_0_k$();
       while (tmp0_iterator.hasNext_0_k$()) {
@@ -27531,7 +27678,7 @@
       var newBuffer = bufferOfSize(this, this._get_size__0_k$() + 1 | 0);
       var tmp$ret$0;
       $l$block: {
-        var tmp0_copyInto_0 = this._buffer_0;
+        var tmp0_copyInto_0 = this._buffer_1;
         arrayCopy_0(tmp0_copyInto_0, newBuffer, 0, 0, index);
         tmp$ret$0 = newBuffer;
         break $l$block;
@@ -27539,7 +27686,7 @@
       Unit_getInstance();
       var tmp$ret$1;
       $l$block_0: {
-        var tmp1_copyInto_0 = this._buffer_0;
+        var tmp1_copyInto_0 = this._buffer_1;
         var tmp2_copyInto_0 = index + 1 | 0;
         var tmp3_copyInto_0 = this._get_size__0_k$();
         arrayCopy_0(tmp1_copyInto_0, newBuffer, tmp2_copyInto_0, index, tmp3_copyInto_0);
@@ -27551,7 +27698,7 @@
       return new SmallPersistentVector(newBuffer);
     }var tmp$ret$3;
     $l$block_2: {
-      var tmp4_copyOf_0 = this._buffer_0;
+      var tmp4_copyOf_0 = this._buffer_1;
       var tmp$ret$2;
       $l$block_1: {
         tmp$ret$2 = tmp4_copyOf_0;
@@ -27563,7 +27710,7 @@
     var root = tmp$ret$3;
     var tmp$ret$4;
     $l$block_3: {
-      var tmp5_copyInto_0 = this._buffer_0;
+      var tmp5_copyInto_0 = this._buffer_1;
       var tmp6_copyInto_0 = index + 1 | 0;
       var tmp7_copyInto_0 = this._get_size__0_k$() - 1 | 0;
       arrayCopy_0(tmp5_copyInto_0, root, tmp6_copyInto_0, index, tmp7_copyInto_0);
@@ -27572,17 +27719,17 @@
     }
     Unit_getInstance();
     root[index] = element;
-    var tail = presizedBufferWith(this._buffer_0[31]);
+    var tail = presizedBufferWith(this._buffer_1[31]);
     return new PersistentVector(root, tail, this._get_size__0_k$() + 1 | 0, 0);
   };
   SmallPersistentVector.prototype.removeAt_ha5a7z_k$ = function (index) {
     ListImplementation_getInstance().checkElementIndex_rvwcgf_k$(index, this._get_size__0_k$());
     if (this._get_size__0_k$() === 1) {
       return Companion_getInstance_10()._EMPTY_0;
-    }var newBuffer = copyOf_0(this._buffer_0, this._get_size__0_k$() - 1 | 0);
+    }var newBuffer = copyOf_0(this._buffer_1, this._get_size__0_k$() - 1 | 0);
     var tmp$ret$0;
     $l$block: {
-      var tmp0_copyInto_0 = this._buffer_0;
+      var tmp0_copyInto_0 = this._buffer_1;
       var tmp1_copyInto_0 = index + 1 | 0;
       var tmp2_copyInto_0 = this._get_size__0_k$();
       arrayCopy_0(tmp0_copyInto_0, newBuffer, index, tmp1_copyInto_0, tmp2_copyInto_0);
@@ -27593,29 +27740,29 @@
     return new SmallPersistentVector(newBuffer);
   };
   SmallPersistentVector.prototype.builder_0_k$ = function () {
-    return new PersistentVectorBuilder(this, null, this._buffer_0, 0);
+    return new PersistentVectorBuilder(this, null, this._buffer_1, 0);
   };
   SmallPersistentVector.prototype.indexOf_2bq_k$ = function (element) {
-    return indexOf(this._buffer_0, element);
+    return indexOf(this._buffer_1, element);
   };
   SmallPersistentVector.prototype.lastIndexOf_2bq_k$ = function (element) {
-    return lastIndexOf(this._buffer_0, element);
+    return lastIndexOf(this._buffer_1, element);
   };
   SmallPersistentVector.prototype.listIterator_ha5a7z_k$ = function (index) {
     ListImplementation_getInstance().checkPositionIndex_rvwcgf_k$(index, this._get_size__0_k$());
-    var tmp = this._buffer_0;
+    var tmp = this._buffer_1;
     return new BufferIterator(isArray(tmp) ? tmp : THROW_CCE(), index, this._get_size__0_k$());
   };
   SmallPersistentVector.prototype.get_ha5a7z_k$ = function (index) {
     ListImplementation_getInstance().checkElementIndex_rvwcgf_k$(index, this._get_size__0_k$());
-    var tmp = this._buffer_0[index];
+    var tmp = this._buffer_1[index];
     return (tmp == null ? true : isObject(tmp)) ? tmp : THROW_CCE();
   };
   SmallPersistentVector.prototype.set_ddb1qf_k$ = function (index, element) {
     ListImplementation_getInstance().checkElementIndex_rvwcgf_k$(index, this._get_size__0_k$());
     var tmp$ret$1;
     $l$block_0: {
-      var tmp0_copyOf_0 = this._buffer_0;
+      var tmp0_copyOf_0 = this._buffer_1;
       var tmp$ret$0;
       $l$block: {
         tmp$ret$0 = tmp0_copyOf_0;
@@ -28086,7 +28233,7 @@
   function resetPath($this, keyHash, node_0, key_0, pathIndex) {
     var shift = imul(pathIndex, 5);
     if (shift > 30) {
-      $this._get_path__0_k$()[pathIndex].reset_1vj1qa_k$(node_0._buffer_2, node_0._buffer_2.length, 0);
+      $this._get_path__0_k$()[pathIndex].reset_1vj1qa_k$(node_0._buffer_3, node_0._buffer_3.length, 0);
       while (!equals_0($this._get_path__0_k$()[pathIndex].currentKey_0_k$(), key_0)) {
         $this._get_path__0_k$()[pathIndex].moveToNextKey_sv8swh_k$();
       }
@@ -28095,12 +28242,12 @@
     }var keyPositionMask = 1 << indexSegment_0(keyHash, shift);
     if (node_0.hasEntryAt_ha5a7z_k$(keyPositionMask)) {
       var keyIndex = node_0.entryKeyIndex_ha5a7z_k$(keyPositionMask);
-      $this._get_path__0_k$()[pathIndex].reset_1vj1qa_k$(node_0._buffer_2, imul(2, node_0.entryCount_0_k$()), keyIndex);
+      $this._get_path__0_k$()[pathIndex].reset_1vj1qa_k$(node_0._buffer_3, imul(2, node_0.entryCount_0_k$()), keyIndex);
       $this._set_pathLastIndex__majfzk_k$(pathIndex);
       return Unit_getInstance();
     }var nodeIndex_1 = node_0.nodeIndex_ha5a7z_k$(keyPositionMask);
     var targetNode = node_0.nodeAtIndex_ha5a7z_k$(nodeIndex_1);
-    $this._get_path__0_k$()[pathIndex].reset_1vj1qa_k$(node_0._buffer_2, imul(2, node_0.entryCount_0_k$()), nodeIndex_1);
+    $this._get_path__0_k$()[pathIndex].reset_1vj1qa_k$(node_0._buffer_3, imul(2, node_0.entryCount_0_k$()), nodeIndex_1);
     resetPath($this, keyHash, targetNode, key_0, pathIndex + 1 | 0);
   }
   function checkNextWasInvoked($this) {
@@ -28427,12 +28574,12 @@
     interfaces: []
   };
   function TrieNodeBaseIterator() {
-    this._buffer_1 = Companion_getInstance_12()._EMPTY_2._buffer_2;
+    this._buffer_2 = Companion_getInstance_12()._EMPTY_2._buffer_3;
     this._dataSize = 0;
     this._index_7 = 0;
   }
   TrieNodeBaseIterator.prototype._get_buffer__0_k$ = function () {
-    return this._buffer_1;
+    return this._buffer_2;
   };
   TrieNodeBaseIterator.prototype._set_index__majfzk_k$ = function (_set___) {
     this._index_7 = _set___;
@@ -28441,7 +28588,7 @@
     return this._index_7;
   };
   TrieNodeBaseIterator.prototype.reset_1vj1qa_k$ = function (buffer, dataSize, index) {
-    this._buffer_1 = buffer;
+    this._buffer_2 = buffer;
     this._dataSize = dataSize;
     this._index_7 = index;
   };
@@ -28453,7 +28600,7 @@
   };
   TrieNodeBaseIterator.prototype.currentKey_0_k$ = function () {
     assert(this.hasNextKey_0_k$());
-    var tmp = this._buffer_1[this._index_7];
+    var tmp = this._buffer_2[this._index_7];
     return (tmp == null ? true : isObject(tmp)) ? tmp : THROW_CCE();
   };
   TrieNodeBaseIterator.prototype.moveToNextKey_sv8swh_k$ = function () {
@@ -28463,11 +28610,11 @@
   };
   TrieNodeBaseIterator.prototype.hasNextNode_0_k$ = function () {
     assert(this._index_7 >= this._dataSize);
-    return this._index_7 < this._buffer_1.length;
+    return this._index_7 < this._buffer_2.length;
   };
   TrieNodeBaseIterator.prototype.currentNode_0_k$ = function () {
     assert(this.hasNextNode_0_k$());
-    var tmp = this._buffer_1[this._index_7];
+    var tmp = this._buffer_2[this._index_7];
     return tmp instanceof TrieNode ? tmp : THROW_CCE();
   };
   TrieNodeBaseIterator.prototype.moveToNextNode_sv8swh_k$ = function () {
@@ -28521,9 +28668,9 @@
     }if ($this._path_0[pathIndex].hasNextNode_0_k$()) {
       var node_0 = $this._path_0[pathIndex].currentNode_0_k$();
       if (pathIndex === 6) {
-        $this._path_0[pathIndex + 1 | 0].reset_tvwza9_k$(node_0._buffer_2, node_0._buffer_2.length);
+        $this._path_0[pathIndex + 1 | 0].reset_tvwza9_k$(node_0._buffer_3, node_0._buffer_3.length);
       } else {
-        $this._path_0[pathIndex + 1 | 0].reset_tvwza9_k$(node_0._buffer_2, imul(2, node_0.entryCount_0_k$()));
+        $this._path_0[pathIndex + 1 | 0].reset_tvwza9_k$(node_0._buffer_3, imul(2, node_0.entryCount_0_k$()));
       }
       return moveToNextNodeWithData($this, pathIndex + 1 | 0);
     }return -1;
@@ -28545,7 +28692,7 @@
           return Unit_getInstance();
         }if (i > 0) {
           $this._path_0[i - 1 | 0].moveToNextNode_sv8swh_k$();
-        }$this._path_0[i].reset_tvwza9_k$(Companion_getInstance_12()._EMPTY_2._buffer_2, 0);
+        }$this._path_0[i].reset_tvwza9_k$(Companion_getInstance_12()._EMPTY_2._buffer_3, 0);
       }
        while (0 <= inductionVariable);
     $this._hasNext_0 = false;
@@ -28558,7 +28705,7 @@
     this._path_0 = path;
     this._pathLastIndex = 0;
     this._hasNext_0 = true;
-    this._path_0[0].reset_tvwza9_k$(node_0._buffer_2, imul(2, node_0.entryCount_0_k$()));
+    this._path_0[0].reset_tvwza9_k$(node_0._buffer_3, imul(2, node_0.entryCount_0_k$()));
     this._pathLastIndex = 0;
     ensureNextEntryIsReady(this);
   }
@@ -28765,31 +28912,31 @@
     return !(($this._nodeMap & positionMask) === 0);
   }
   function keyAtIndex($this, keyIndex) {
-    var tmp = $this._buffer_2[keyIndex];
+    var tmp = $this._buffer_3[keyIndex];
     return (tmp == null ? true : isObject(tmp)) ? tmp : THROW_CCE();
   }
   function valueAtKeyIndex($this, keyIndex) {
-    var tmp = $this._buffer_2[keyIndex + 1 | 0];
+    var tmp = $this._buffer_3[keyIndex + 1 | 0];
     return (tmp == null ? true : isObject(tmp)) ? tmp : THROW_CCE();
   }
   function insertEntryAt($this, positionMask, key_0, value) {
     var keyIndex = $this.entryKeyIndex_ha5a7z_k$(positionMask);
-    var newBuffer = insertEntryAtIndex($this._buffer_2, keyIndex, key_0, value);
+    var newBuffer = insertEntryAtIndex($this._buffer_3, keyIndex, key_0, value);
     return TrieNode_init_$Create$($this._dataMap | positionMask, $this._nodeMap, newBuffer);
   }
   function mutableInsertEntryAt($this, positionMask, key_0, value, owner) {
     var keyIndex = $this.entryKeyIndex_ha5a7z_k$(positionMask);
     if ($this._ownedBy === owner) {
-      $this._buffer_2 = insertEntryAtIndex($this._buffer_2, keyIndex, key_0, value);
+      $this._buffer_3 = insertEntryAtIndex($this._buffer_3, keyIndex, key_0, value);
       $this._dataMap = $this._dataMap | positionMask;
       return $this;
-    }var newBuffer = insertEntryAtIndex($this._buffer_2, keyIndex, key_0, value);
+    }var newBuffer = insertEntryAtIndex($this._buffer_3, keyIndex, key_0, value);
     return new TrieNode($this._dataMap | positionMask, $this._nodeMap, newBuffer, owner);
   }
   function updateValueAtIndex($this, keyIndex, value) {
     var tmp$ret$1;
     $l$block_0: {
-      var tmp0_copyOf_0 = $this._buffer_2;
+      var tmp0_copyOf_0 = $this._buffer_3;
       var tmp$ret$0;
       $l$block: {
         tmp$ret$0 = tmp0_copyOf_0;
@@ -28804,7 +28951,7 @@
   }
   function mutableUpdateValueAtIndex($this, keyIndex, value, mutator) {
     if ($this._ownedBy === mutator._ownership_0) {
-      $this._buffer_2[keyIndex + 1 | 0] = value;
+      $this._buffer_3[keyIndex + 1 | 0] = value;
       return $this;
     }var tmp0_this = mutator;
     var tmp1 = tmp0_this._modCount_0;
@@ -28812,7 +28959,7 @@
     Unit_getInstance();
     var tmp$ret$1;
     $l$block_0: {
-      var tmp0_copyOf_0 = $this._buffer_2;
+      var tmp0_copyOf_0 = $this._buffer_3;
       var tmp$ret$0;
       $l$block: {
         tmp$ret$0 = tmp0_copyOf_0;
@@ -28826,28 +28973,28 @@
     return new TrieNode($this._dataMap, $this._nodeMap, newBuffer, mutator._ownership_0);
   }
   function updateNodeAtIndex($this, nodeIndex_1, positionMask, newNode) {
-    var newNodeBuffer = newNode._buffer_2;
+    var newNodeBuffer = newNode._buffer_3;
     if (newNodeBuffer.length === 2 ? newNode._nodeMap === 0 : false) {
-      if ($this._buffer_2.length === 1) {
+      if ($this._buffer_3.length === 1) {
         newNode._dataMap = $this._nodeMap;
         return newNode;
       }var keyIndex = $this.entryKeyIndex_ha5a7z_k$(positionMask);
-      var newBuffer = replaceNodeWithEntry($this._buffer_2, nodeIndex_1, keyIndex, newNodeBuffer[0], newNodeBuffer[1]);
+      var newBuffer = replaceNodeWithEntry($this._buffer_3, nodeIndex_1, keyIndex, newNodeBuffer[0], newNodeBuffer[1]);
       return TrieNode_init_$Create$($this._dataMap ^ positionMask, $this._nodeMap ^ positionMask, newBuffer);
-    }var newBuffer_0 = copyOf_0($this._buffer_2, $this._buffer_2.length);
+    }var newBuffer_0 = copyOf_0($this._buffer_3, $this._buffer_3.length);
     newBuffer_0[nodeIndex_1] = newNode;
     return TrieNode_init_$Create$($this._dataMap, $this._nodeMap, newBuffer_0);
   }
   function mutableUpdateNodeAtIndex($this, nodeIndex_1, newNode, owner) {
-    if (($this._buffer_2.length === 1 ? newNode._buffer_2.length === 2 : false) ? newNode._nodeMap === 0 : false) {
+    if (($this._buffer_3.length === 1 ? newNode._buffer_3.length === 2 : false) ? newNode._nodeMap === 0 : false) {
       newNode._dataMap = $this._nodeMap;
       return newNode;
     }if ($this._ownedBy === owner) {
-      $this._buffer_2[nodeIndex_1] = newNode;
+      $this._buffer_3[nodeIndex_1] = newNode;
       return $this;
     }var tmp$ret$1;
     $l$block_0: {
-      var tmp0_copyOf_0 = $this._buffer_2;
+      var tmp0_copyOf_0 = $this._buffer_3;
       var tmp$ret$0;
       $l$block: {
         tmp$ret$0 = tmp0_copyOf_0;
@@ -28861,19 +29008,19 @@
     return new TrieNode($this._dataMap, $this._nodeMap, newBuffer, owner);
   }
   function removeNodeAtIndex($this, nodeIndex_1, positionMask) {
-    if ($this._buffer_2.length === 1)
+    if ($this._buffer_3.length === 1)
       return null;
-    var newBuffer = removeNodeAtIndex_0($this._buffer_2, nodeIndex_1);
+    var newBuffer = removeNodeAtIndex_0($this._buffer_3, nodeIndex_1);
     return TrieNode_init_$Create$($this._dataMap, $this._nodeMap ^ positionMask, newBuffer);
   }
   function mutableRemoveNodeAtIndex($this, nodeIndex_1, positionMask, owner) {
-    if ($this._buffer_2.length === 1)
+    if ($this._buffer_3.length === 1)
       return null;
     if ($this._ownedBy === owner) {
-      $this._buffer_2 = removeNodeAtIndex_0($this._buffer_2, nodeIndex_1);
+      $this._buffer_3 = removeNodeAtIndex_0($this._buffer_3, nodeIndex_1);
       $this._nodeMap = $this._nodeMap ^ positionMask;
       return $this;
-    }var newBuffer = removeNodeAtIndex_0($this._buffer_2, nodeIndex_1);
+    }var newBuffer = removeNodeAtIndex_0($this._buffer_3, nodeIndex_1);
     return new TrieNode($this._dataMap, $this._nodeMap ^ positionMask, newBuffer, owner);
   }
   function bufferMoveEntryToNode($this, keyIndex, positionMask, newKeyHash, newKey, newValue, shift, owner) {
@@ -28889,7 +29036,7 @@
     var storedValue = valueAtKeyIndex($this, keyIndex);
     var newNode = makeNode_0($this, storedKeyHash, storedKey, storedValue, newKeyHash, newKey, newValue, shift + 5 | 0, owner);
     var nodeIndex_1 = $this.nodeIndex_ha5a7z_k$(positionMask) + 1 | 0;
-    return replaceEntryWithNode($this._buffer_2, keyIndex, nodeIndex_1, newNode);
+    return replaceEntryWithNode($this._buffer_3, keyIndex, nodeIndex_1, newNode);
   }
   function moveEntryToNode($this, keyIndex, positionMask, newKeyHash, newKey, newValue, shift) {
     var newBuffer = bufferMoveEntryToNode($this, keyIndex, positionMask, newKeyHash, newKey, newValue, shift, null);
@@ -28897,7 +29044,7 @@
   }
   function mutableMoveEntryToNode($this, keyIndex, positionMask, newKeyHash, newKey, newValue, shift, owner) {
     if ($this._ownedBy === owner) {
-      $this._buffer_2 = bufferMoveEntryToNode($this, keyIndex, positionMask, newKeyHash, newKey, newValue, shift, owner);
+      $this._buffer_3 = bufferMoveEntryToNode($this, keyIndex, positionMask, newKeyHash, newKey, newValue, shift, owner);
       $this._dataMap = $this._dataMap ^ positionMask;
       $this._nodeMap = $this._nodeMap | positionMask;
       return $this;
@@ -28983,9 +29130,9 @@
     return new TrieNode(0, tmp_0, tmp$ret$11, owner);
   }
   function removeEntryAtIndex($this, keyIndex, positionMask) {
-    if ($this._buffer_2.length === 2)
+    if ($this._buffer_3.length === 2)
       return null;
-    var newBuffer = removeEntryAtIndex_0($this._buffer_2, keyIndex);
+    var newBuffer = removeEntryAtIndex_0($this._buffer_3, keyIndex);
     return TrieNode_init_$Create$($this._dataMap ^ positionMask, $this._nodeMap, newBuffer);
   }
   function mutableRemoveEntryAtIndex($this, keyIndex, positionMask, mutator) {
@@ -28994,19 +29141,19 @@
     tmp0_this._set_size__majfzk_k$(tmp1 - 1 | 0);
     Unit_getInstance();
     mutator._operationResult = valueAtKeyIndex($this, keyIndex);
-    if ($this._buffer_2.length === 2)
+    if ($this._buffer_3.length === 2)
       return null;
     if ($this._ownedBy === mutator._ownership_0) {
-      $this._buffer_2 = removeEntryAtIndex_0($this._buffer_2, keyIndex);
+      $this._buffer_3 = removeEntryAtIndex_0($this._buffer_3, keyIndex);
       $this._dataMap = $this._dataMap ^ positionMask;
       return $this;
-    }var newBuffer = removeEntryAtIndex_0($this._buffer_2, keyIndex);
+    }var newBuffer = removeEntryAtIndex_0($this._buffer_3, keyIndex);
     return new TrieNode($this._dataMap ^ positionMask, $this._nodeMap, newBuffer, mutator._ownership_0);
   }
   function collisionRemoveEntryAtIndex($this, i) {
-    if ($this._buffer_2.length === 2)
+    if ($this._buffer_3.length === 2)
       return null;
-    var newBuffer = removeEntryAtIndex_0($this._buffer_2, i);
+    var newBuffer = removeEntryAtIndex_0($this._buffer_3, i);
     return TrieNode_init_$Create$(0, 0, newBuffer);
   }
   function mutableCollisionRemoveEntryAtIndex($this, i, mutator) {
@@ -29015,16 +29162,16 @@
     tmp0_this._set_size__majfzk_k$(tmp1 - 1 | 0);
     Unit_getInstance();
     mutator._operationResult = valueAtKeyIndex($this, i);
-    if ($this._buffer_2.length === 2)
+    if ($this._buffer_3.length === 2)
       return null;
     if ($this._ownedBy === mutator._ownership_0) {
-      $this._buffer_2 = removeEntryAtIndex_0($this._buffer_2, i);
+      $this._buffer_3 = removeEntryAtIndex_0($this._buffer_3, i);
       return $this;
-    }var newBuffer = removeEntryAtIndex_0($this._buffer_2, i);
+    }var newBuffer = removeEntryAtIndex_0($this._buffer_3, i);
     return new TrieNode(0, 0, newBuffer, mutator._ownership_0);
   }
   function collisionContainsKey($this, key_0) {
-    var progression = step(until(0, $this._buffer_2.length), 2);
+    var progression = step(until(0, $this._buffer_3.length), 2);
     var inductionVariable = progression._first_0;
     var last_0 = progression._last;
     var step_0 = progression._step_0;
@@ -29032,14 +29179,14 @@
       do {
         var i = inductionVariable;
         inductionVariable = inductionVariable + step_0 | 0;
-        if (equals_0(key_0, $this._buffer_2[i]))
+        if (equals_0(key_0, $this._buffer_3[i]))
           return true;
       }
        while (!(i === last_0));
     return false;
   }
   function collisionGet($this, key_0) {
-    var progression = step(until(0, $this._buffer_2.length), 2);
+    var progression = step(until(0, $this._buffer_3.length), 2);
     var inductionVariable = progression._first_0;
     var last_0 = progression._last;
     var step_0 = progression._step_0;
@@ -29054,7 +29201,7 @@
     return null;
   }
   function collisionPut($this, key_0, value) {
-    var progression = step(until(0, $this._buffer_2.length), 2);
+    var progression = step(until(0, $this._buffer_3.length), 2);
     var inductionVariable = progression._first_0;
     var last_0 = progression._last;
     var step_0 = progression._step_0;
@@ -29067,7 +29214,7 @@
             return null;
           }var tmp$ret$1;
           $l$block_0: {
-            var tmp0_copyOf_0 = $this._buffer_2;
+            var tmp0_copyOf_0 = $this._buffer_3;
             var tmp$ret$0;
             $l$block: {
               tmp$ret$0 = tmp0_copyOf_0;
@@ -29081,11 +29228,11 @@
           return asUpdateResult(TrieNode_init_$Create$(0, 0, newBuffer));
         }}
        while (!(i === last_0));
-    var newBuffer_0 = insertEntryAtIndex($this._buffer_2, 0, key_0, value);
+    var newBuffer_0 = insertEntryAtIndex($this._buffer_3, 0, key_0, value);
     return asInsertResult(TrieNode_init_$Create$(0, 0, newBuffer_0));
   }
   function mutableCollisionPut($this, key_0, value, mutator) {
-    var progression = step(until(0, $this._buffer_2.length), 2);
+    var progression = step(until(0, $this._buffer_3.length), 2);
     var inductionVariable = progression._first_0;
     var last_0 = progression._last;
     var step_0 = progression._step_0;
@@ -29096,7 +29243,7 @@
         if (equals_0(key_0, keyAtIndex($this, i))) {
           mutator._operationResult = valueAtKeyIndex($this, i);
           if ($this._ownedBy === mutator._ownership_0) {
-            $this._buffer_2[i + 1 | 0] = value;
+            $this._buffer_3[i + 1 | 0] = value;
             return $this;
           }var tmp1_this = mutator;
           var tmp2 = tmp1_this._modCount_0;
@@ -29104,7 +29251,7 @@
           Unit_getInstance();
           var tmp$ret$1;
           $l$block_0: {
-            var tmp0_copyOf_0 = $this._buffer_2;
+            var tmp0_copyOf_0 = $this._buffer_3;
             var tmp$ret$0;
             $l$block: {
               tmp$ret$0 = tmp0_copyOf_0;
@@ -29122,11 +29269,11 @@
     var tmp4 = tmp3_this._size_8;
     tmp3_this._set_size__majfzk_k$(tmp4 + 1 | 0);
     Unit_getInstance();
-    var newBuffer_0 = insertEntryAtIndex($this._buffer_2, 0, key_0, value);
+    var newBuffer_0 = insertEntryAtIndex($this._buffer_3, 0, key_0, value);
     return new TrieNode(0, 0, newBuffer_0, mutator._ownership_0);
   }
   function collisionRemove($this, key_0) {
-    var progression = step(until(0, $this._buffer_2.length), 2);
+    var progression = step(until(0, $this._buffer_3.length), 2);
     var inductionVariable = progression._first_0;
     var last_0 = progression._last;
     var step_0 = progression._step_0;
@@ -29141,7 +29288,7 @@
     return $this;
   }
   function mutableCollisionRemove($this, key_0, mutator) {
-    var progression = step(until(0, $this._buffer_2.length), 2);
+    var progression = step(until(0, $this._buffer_3.length), 2);
     var inductionVariable = progression._first_0;
     var last_0 = progression._last;
     var step_0 = progression._step_0;
@@ -29156,7 +29303,7 @@
     return $this;
   }
   function mutableCollisionRemove_0($this, key_0, value, mutator) {
-    var progression = step(until(0, $this._buffer_2.length), 2);
+    var progression = step(until(0, $this._buffer_3.length), 2);
     var inductionVariable = progression._first_0;
     var last_0 = progression._last;
     var step_0 = progression._step_0;
@@ -29175,9 +29322,9 @@
     assert($this._dataMap === 0);
     assert(otherNode._nodeMap === 0);
     assert(otherNode._dataMap === 0);
-    var tempBuffer = copyOf_0($this._buffer_2, $this._buffer_2.length + otherNode._buffer_2.length | 0);
-    var i = $this._buffer_2.length;
-    var progression = step(until(0, otherNode._buffer_2.length), 2);
+    var tempBuffer = copyOf_0($this._buffer_3, $this._buffer_3.length + otherNode._buffer_3.length | 0);
+    var i = $this._buffer_3.length;
+    var progression = step(until(0, otherNode._buffer_3.length), 2);
     var inductionVariable = progression._first_0;
     var last_0 = progression._last;
     var step_0 = progression._step_0;
@@ -29185,10 +29332,10 @@
       do {
         var j = inductionVariable;
         inductionVariable = inductionVariable + step_0 | 0;
-        var tmp = otherNode._buffer_2[j];
+        var tmp = otherNode._buffer_3[j];
         if (!collisionContainsKey($this, (tmp == null ? true : isObject(tmp)) ? tmp : THROW_CCE())) {
-          tempBuffer[i] = otherNode._buffer_2[j];
-          tempBuffer[i + 1 | 0] = otherNode._buffer_2[j + 1 | 0];
+          tempBuffer[i] = otherNode._buffer_3[j];
+          tempBuffer[i + 1 | 0] = otherNode._buffer_3[j + 1 | 0];
           i = i + 2 | 0;
         } else {
           {
@@ -29201,7 +29348,7 @@
       }
        while (!(j === last_0));
     var newSize = i;
-    return newSize === $this._buffer_2.length ? $this : newSize === otherNode._buffer_2.length ? otherNode : newSize === tempBuffer.length ? new TrieNode(0, 0, tempBuffer, owner) : new TrieNode(0, 0, copyOf_0(tempBuffer, newSize), owner);
+    return newSize === $this._buffer_3.length ? $this : newSize === otherNode._buffer_3.length ? otherNode : newSize === tempBuffer.length ? new TrieNode(0, 0, tempBuffer, owner) : new TrieNode(0, 0, copyOf_0(tempBuffer, newSize), owner);
   }
   function mutablePutAllFromOtherNodeCell($this, otherNode, positionMask, shift, intersectionCounter, mutator) {
     var tmp;
@@ -29309,11 +29456,11 @@
   }
   function calculateSize($this) {
     if ($this._nodeMap === 0)
-      return $this._buffer_2.length / 2 | 0;
+      return $this._buffer_3.length / 2 | 0;
     var numValues = countOneBits($this._dataMap);
     var result = numValues;
     var inductionVariable = imul(numValues, 2);
-    var last_0 = $this._buffer_2.length;
+    var last_0 = $this._buffer_3.length;
     if (inductionVariable < last_0)
       do {
         var i = inductionVariable;
@@ -29331,12 +29478,12 @@
     if (!($this._dataMap === otherNode._dataMap))
       return false;
     var inductionVariable = 0;
-    var last_0 = $this._buffer_2.length;
+    var last_0 = $this._buffer_3.length;
     if (inductionVariable < last_0)
       do {
         var i = inductionVariable;
         inductionVariable = inductionVariable + 1 | 0;
-        if (!($this._buffer_2[i] === otherNode._buffer_2[i]))
+        if (!($this._buffer_3[i] === otherNode._buffer_3[i]))
           return false;
       }
        while (inductionVariable < last_0);
@@ -29374,7 +29521,7 @@
     this._dataMap = dataMap;
     this._nodeMap = nodeMap;
     this._ownedBy = ownedBy;
-    this._buffer_2 = buffer;
+    this._buffer_3 = buffer;
   }
   TrieNode.prototype.entryCount_0_k$ = function () {
     return countOneBits(this._dataMap);
@@ -29386,10 +29533,10 @@
     return imul(2, countOneBits(this._dataMap & (positionMask - 1 | 0)));
   };
   TrieNode.prototype.nodeIndex_ha5a7z_k$ = function (positionMask) {
-    return (this._buffer_2.length - 1 | 0) - countOneBits(this._nodeMap & (positionMask - 1 | 0)) | 0;
+    return (this._buffer_3.length - 1 | 0) - countOneBits(this._nodeMap & (positionMask - 1 | 0)) | 0;
   };
   TrieNode.prototype.nodeAtIndex_ha5a7z_k$ = function (nodeIndex_1) {
-    var tmp = this._buffer_2[nodeIndex_1];
+    var tmp = this._buffer_3[nodeIndex_1];
     return tmp instanceof TrieNode ? tmp : THROW_CCE();
   };
   TrieNode.prototype.containsKey_s82vys_k$ = function (keyHash, key_0, shift) {
@@ -29485,8 +29632,8 @@
         var bit_3_0 = takeLowestOneBit(mask_1_0);
         {
           var tmp5__anonymous__5 = index_2_0;
-          var newNodeIndex_6 = (mutableNode._buffer_2.length - 1 | 0) - tmp5__anonymous__5 | 0;
-          mutableNode._buffer_2[newNodeIndex_6] = mutablePutAllFromOtherNodeCell(this, otherNode, bit_3_0, shift, intersectionCounter, mutator);
+          var newNodeIndex_6 = (mutableNode._buffer_3.length - 1 | 0) - tmp5__anonymous__5 | 0;
+          mutableNode._buffer_3[newNodeIndex_6] = mutablePutAllFromOtherNodeCell(this, otherNode, bit_3_0, shift, intersectionCounter, mutator);
         }
         var tmp0_4_0 = index_2_0;
         index_2_0 = tmp0_4_0 + 1 | 0;
@@ -29505,12 +29652,12 @@
           var newKeyIndex_6 = imul(tmp7__anonymous__5, 2);
           if (!otherNode.hasEntryAt_ha5a7z_k$(bit_3_1)) {
             var oldKeyIndex_7 = this.entryKeyIndex_ha5a7z_k$(bit_3_1);
-            mutableNode._buffer_2[newKeyIndex_6] = keyAtIndex(this, oldKeyIndex_7);
-            mutableNode._buffer_2[newKeyIndex_6 + 1 | 0] = valueAtKeyIndex(this, oldKeyIndex_7);
+            mutableNode._buffer_3[newKeyIndex_6] = keyAtIndex(this, oldKeyIndex_7);
+            mutableNode._buffer_3[newKeyIndex_6 + 1 | 0] = valueAtKeyIndex(this, oldKeyIndex_7);
           } else {
             var oldKeyIndex_8 = otherNode.entryKeyIndex_ha5a7z_k$(bit_3_1);
-            mutableNode._buffer_2[newKeyIndex_6] = keyAtIndex(otherNode, oldKeyIndex_8);
-            mutableNode._buffer_2[newKeyIndex_6 + 1 | 0] = valueAtKeyIndex(otherNode, oldKeyIndex_8);
+            mutableNode._buffer_3[newKeyIndex_6] = keyAtIndex(otherNode, oldKeyIndex_8);
+            mutableNode._buffer_3[newKeyIndex_6 + 1 | 0] = valueAtKeyIndex(otherNode, oldKeyIndex_8);
             if (this.hasEntryAt_ha5a7z_k$(bit_3_1)) {
               var tmp0_this_9 = intersectionCounter;
               var tmp1_10 = tmp0_this_9._count;
@@ -53288,7 +53435,11 @@
   _no_name_provided__449.prototype.invoke_jpel0v_k$ = function ($this$Box, $composer, $changed) {
     var $composer_0 = $composer;
     if (!(($changed & 81 ^ 16) === 0) ? true : !$composer_0._get_skipping__0_k$()) {
-      Column$composable(null, null, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_1_5, $composer_0, 24576, 15);
+      var tmp = Companion_getInstance_38();
+      var tmp_0 = width$default(tmp, widthScreen, null, 2, null);
+      var tmp_1 = Companion_getInstance_37()._CenterHorizontally;
+      Column$composable(tmp_0, null, tmp_1, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_1_5, $composer_0, 24576, 10);
+      println('' + 'width screen: ' + widthScreen);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
   };
@@ -53389,7 +53540,9 @@
   _no_name_provided__453.prototype.invoke_jpel0v_k$ = function ($this$Box, $composer, $changed) {
     var $composer_0 = $composer;
     if (!(($changed & 81 ^ 16) === 0) ? true : !$composer_0._get_skipping__0_k$()) {
-      var width_2 = window.innerWidth * 0.8;
+      var tmp0_safe_receiver = document.body;
+      var tmp1_elvis_lhs = tmp0_safe_receiver == null ? null : tmp0_safe_receiver.clientWidth;
+      var width_2 = (tmp1_elvis_lhs == null ? 400 : tmp1_elvis_lhs) * 0.8;
       var height_1 = 221 * width_2 / 202;
       var tmp = Companion_getInstance_38();
       var tmp_0 = _get_px_(width_2);
@@ -53512,7 +53665,7 @@
     if (!(($changed & 81 ^ 16) === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp5_contentAlignment = Companion_getInstance_37()._CenterEnd;
       var tmp = Companion_getInstance_38();
-      var tmp0_$receiver = fillMaxWidth$default(tmp, null, 1, null);
+      var tmp0_$receiver = width$default(tmp, widthScreen, null, 2, null);
       var tmp1_top = _get_px_(60);
       var tmp2_right = _get_px_(0);
       var tmp3_left = _get_px_(0);
@@ -53576,9 +53729,10 @@
       var tmp_1 = padding$default(tmp_0, null, PADDING_0, null, null, 13, null);
       Text$composable_0(tmp, tmp_1, null, $composer_0, 6, 4);
       var tmp_2 = Companion_getInstance_38();
-      var tmp_3 = _get_px_(25);
-      var tmp_4 = padding$default(tmp_2, tmp_3, null, null, null, 14, null);
-      Column$composable(tmp_4, null, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_10_0, $composer_0, 24576, 14);
+      var tmp_3 = width$default(tmp_2, widthScreen, null, 2, null);
+      var tmp_4 = _get_px_(25);
+      var tmp_5 = padding$default(tmp_3, tmp_4, PADDING_0, null, null, 12, null);
+      Column$composable(tmp_5, null, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_10_0, $composer_0, 24576, 14);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
   };
@@ -53840,7 +53994,7 @@
       var tmp_2 = Companion_getInstance_38();
       var tmp_3 = _get_px_(40);
       var tmp_4 = height$default(tmp_2, tmp_3, null, 2, null);
-      var tmp_5 = fillMaxWidth$default(tmp_4, null, 1, null);
+      var tmp_5 = width$default(tmp_4, widthScreen, null, 2, null);
       Box$composable(tmp_5, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_20_0, $composer_0, 3072, 6);
       {
         var tmp0_forEach_0 = values_1();
@@ -53910,7 +54064,7 @@
       var tmp_1 = Companion_getInstance_38();
       var tmp_2 = _get_px_(10);
       var tmp_3 = padding$default(tmp_1, tmp_2, null, null, null, 14, null);
-      var tmp_4 = fillMaxWidth$default(tmp_3, null, 1, null);
+      var tmp_4 = width$default(tmp_3, widthScreen, null, 2, null);
       var tmp_5 = Companion_getInstance_36()._Center;
       var tmp_6 = Companion_getInstance_37()._CenterVertically;
       Row$composable(tmp_4, tmp_5, tmp_6, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_22_0, $composer_0, 24576, 8);
@@ -53982,55 +54136,55 @@
   function ComposableSingletons$IndexMobileKt() {
     ComposableSingletons$IndexMobileKt_instance = this;
     var tmp = this;
-    tmp._lambda_1_5 = composableLambdaInstance(-985532814, false, _no_name_provided_$factory_400());
+    tmp._lambda_1_5 = composableLambdaInstance(-985532745, false, _no_name_provided_$factory_400());
     var tmp_0 = this;
-    tmp_0._lambda_2_1 = composableLambdaInstance(-985532829, false, _no_name_provided_$factory_401());
+    tmp_0._lambda_2_1 = composableLambdaInstance(-985532732, false, _no_name_provided_$factory_401());
     var tmp_1 = this;
-    tmp_1._lambda_3_0 = composableLambdaInstance(-985532346, false, _no_name_provided_$factory_402());
+    tmp_1._lambda_3_0 = composableLambdaInstance(-985532235, false, _no_name_provided_$factory_402());
     var tmp_2 = this;
-    tmp_2._lambda_4_0 = composableLambdaInstance(-985530879, false, _no_name_provided_$factory_403());
+    tmp_2._lambda_4_0 = composableLambdaInstance(-985538180, false, _no_name_provided_$factory_403());
     var tmp_3 = this;
-    tmp_3._lambda_5_0 = composableLambdaInstance(-985530608, false, _no_name_provided_$factory_404());
+    tmp_3._lambda_5_0 = composableLambdaInstance(-985530861, false, _no_name_provided_$factory_404());
     var tmp_4 = this;
-    tmp_4._lambda_6_0 = composableLambdaInstance(-985538169, false, _no_name_provided_$factory_405());
+    tmp_4._lambda_6_0 = composableLambdaInstance(-985538422, false, _no_name_provided_$factory_405());
     var tmp_5 = this;
-    tmp_5._lambda_7_0 = composableLambdaInstance(-985537880, false, _no_name_provided_$factory_406());
+    tmp_5._lambda_7_0 = composableLambdaInstance(-985537471, false, _no_name_provided_$factory_406());
     var tmp_6 = this;
-    tmp_6._lambda_8_0 = composableLambdaInstance(-985538399, false, _no_name_provided_$factory_407());
+    tmp_6._lambda_8_0 = composableLambdaInstance(-985537606, false, _no_name_provided_$factory_407());
     var tmp_7 = this;
-    tmp_7._lambda_9_0 = composableLambdaInstance(-985538230, false, _no_name_provided_$factory_408());
+    tmp_7._lambda_9_0 = composableLambdaInstance(-985538487, false, _no_name_provided_$factory_408());
     var tmp_8 = this;
-    tmp_8._lambda_10_0 = composableLambdaInstance(-985535410, false, _no_name_provided_$factory_409());
+    tmp_8._lambda_10_0 = composableLambdaInstance(-985534666, false, _no_name_provided_$factory_409());
     var tmp_9 = this;
-    tmp_9._lambda_11_0 = composableLambdaInstance(-985535967, false, _no_name_provided_$factory_410());
+    tmp_9._lambda_11_0 = composableLambdaInstance(-985535003, false, _no_name_provided_$factory_410());
     var tmp_10 = this;
-    tmp_10._lambda_12_0 = composableLambdaInstance(-985540946, false, _no_name_provided_$factory_411());
+    tmp_10._lambda_12_0 = composableLambdaInstance(-985540563, false, _no_name_provided_$factory_411());
     var tmp_11 = this;
-    tmp_11._lambda_13_0 = composableLambdaInstance(-985540201, false, _no_name_provided_$factory_412());
+    tmp_11._lambda_13_0 = composableLambdaInstance(-985539814, false, _no_name_provided_$factory_412());
     var tmp_12 = this;
-    tmp_12._lambda_14_0 = composableLambdaInstance(-985540224, false, _no_name_provided_$factory_413());
+    tmp_12._lambda_14_0 = composableLambdaInstance(-985539829, false, _no_name_provided_$factory_413());
     var tmp_13 = this;
-    tmp_13._lambda_15_0 = composableLambdaInstance(-985546152, false, _no_name_provided_$factory_414());
+    tmp_13._lambda_15_0 = composableLambdaInstance(-985545241, false, _no_name_provided_$factory_414());
     var tmp_14 = this;
-    tmp_14._lambda_16_0 = composableLambdaInstance(-985546167, false, _no_name_provided_$factory_415());
+    tmp_14._lambda_16_0 = composableLambdaInstance(-985545264, false, _no_name_provided_$factory_415());
     var tmp_15 = this;
-    tmp_15._lambda_17_0 = composableLambdaInstance(-985544027, false, _no_name_provided_$factory_416());
+    tmp_15._lambda_17_0 = composableLambdaInstance(-985543632, false, _no_name_provided_$factory_416());
     var tmp_16 = this;
-    tmp_16._lambda_18_0 = composableLambdaInstance(-985543826, false, _no_name_provided_$factory_417());
+    tmp_16._lambda_18_0 = composableLambdaInstance(-985543943, false, _no_name_provided_$factory_417());
     var tmp_17 = this;
-    tmp_17._lambda_19_0 = composableLambdaInstance(-985543841, false, _no_name_provided_$factory_418());
+    tmp_17._lambda_19_0 = composableLambdaInstance(-985543958, false, _no_name_provided_$factory_418());
     var tmp_18 = this;
-    tmp_18._lambda_20_0 = composableLambdaInstance(-985550398, false, _no_name_provided_$factory_419());
+    tmp_18._lambda_20_0 = composableLambdaInstance(-985549978, false, _no_name_provided_$factory_419());
     var tmp_19 = this;
-    tmp_19._lambda_21_0 = composableLambdaInstance(-985542739, false, _no_name_provided_$factory_420());
+    tmp_19._lambda_21_0 = composableLambdaInstance(-985550387, false, _no_name_provided_$factory_420());
     var tmp_20 = this;
-    tmp_20._lambda_22_0 = composableLambdaInstance(-985547653, false, _no_name_provided_$factory_421());
+    tmp_20._lambda_22_0 = composableLambdaInstance(-985547127, false, _no_name_provided_$factory_421());
     var tmp_21 = this;
-    tmp_21._lambda_23_0 = composableLambdaInstance(-985548163, false, _no_name_provided_$factory_422());
+    tmp_21._lambda_23_0 = composableLambdaInstance(-985547633, false, _no_name_provided_$factory_422());
     var tmp_22 = this;
-    tmp_22._lambda_24_0 = composableLambdaInstance(-985554470, false, _no_name_provided_$factory_423());
+    tmp_22._lambda_24_0 = composableLambdaInstance(-985554324, false, _no_name_provided_$factory_423());
     var tmp_23 = this;
-    tmp_23._lambda_25_0 = composableLambdaInstance(-985554612, false, _no_name_provided_$factory_424());
+    tmp_23._lambda_25_0 = composableLambdaInstance(-985553946, false, _no_name_provided_$factory_424());
   }
   ComposableSingletons$IndexMobileKt.$metadata$ = {
     simpleName: 'ComposableSingletons$IndexMobileKt',
@@ -54045,11 +54199,11 @@
   }
   function MainPageMobile$composable($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(507768332);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(507768440);
     sourceInformation($composer_0, 'C(MainPageMobile$composable)');
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp = Companion_getInstance_38();
-      var tmp_0 = width$default(tmp, widthScreen, null, 2, null);
+      var tmp_0 = fillMaxSize$default(tmp, null, 1, null);
       Box$composable(tmp_0, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_2_1, $composer_0, 3072, 6);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
@@ -54062,7 +54216,7 @@
   }
   function Menu$composable($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(115060469);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(115060710);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       if (_get_isShowMenu_()) {
         var tmp = Companion_getInstance_38();
@@ -54090,7 +54244,7 @@
   function MenuItem$composable(text, top, onClick_0, $composer, $changed, $default) {
     var top_0 = {_v: top};
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(1499547892);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(1499548133);
     var $dirty = $changed;
     if (!(($default & 1) === 0))
       $dirty = $dirty | 6;
@@ -54115,9 +54269,9 @@
         break $l$block;
       }
       var tmp_0 = backgroundColor_1(tmp, tmp$ret$0);
-      var tmp_1 = fillMaxWidth$default(tmp_0, null, 1, null);
+      var tmp_1 = width$default(tmp_0, widthScreen, null, 2, null);
       var tmp_2 = $composer_0;
-      Button$composable(onClick_0, tmp_1, null, null, composableLambda(tmp_2, -819893519, true, _no_name_provided_$factory_435(text, top_0, $dirty)), $composer_0, 24576 | 14 & $dirty >> 6, 12);
+      Button$composable(onClick_0, tmp_1, null, null, composableLambda(tmp_2, -819893254, true, _no_name_provided_$factory_435(text, top_0, $dirty)), $composer_0, 24576 | 14 & $dirty >> 6, 12);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
     var tmp0_safe_receiver = $composer_0.endRestartGroup_0_k$();
@@ -54129,13 +54283,13 @@
   }
   function HeaderMenu$composable($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(232498685);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(232498934);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp0_$receiver = Companion_getInstance_38();
       var tmp1_left = PADDING_0;
       var tmp2_right = PADDING_0;
       var tmp = padding$default(tmp0_$receiver, null, tmp2_right, null, tmp1_left, 5, null);
-      var tmp_0 = fillMaxWidth$default(tmp, null, 1, null);
+      var tmp_0 = width$default(tmp, widthScreen, null, 2, null);
       Column$composable(tmp_0, null, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_5_0, $composer_0, 24576, 14);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
@@ -54148,10 +54302,10 @@
   }
   function Header$composable($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(1766199382);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(1766199635);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp = Companion_getInstance_38();
-      var tmp_0 = fillMaxWidth$default(tmp, null, 1, null);
+      var tmp_0 = width$default(tmp, widthScreen, null, 2, null);
       Box$composable(tmp_0, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_9_0, $composer_0, 3072, 6);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
@@ -54164,14 +54318,15 @@
   }
   function WorkExperience$composable_0($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-505719499);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-505719220);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
-      var tmp0_$receiver = Companion_getInstance_38();
+      var tmp = Companion_getInstance_38();
+      var tmp0_$receiver = width$default(tmp, widthScreen, null, 2, null);
       var tmp1_left = PADDING_0;
       var tmp2_right = PADDING_0;
       var tmp3_top = _get_px_(50);
-      var tmp = id(padding$default(tmp0_$receiver, tmp3_top, tmp2_right, null, tmp1_left, 4, null), IdsMobile_WORK_getInstance()._id_1);
-      Column$composable(tmp, null, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_11_0, $composer_0, 24576, 14);
+      var tmp_0 = id(padding$default(tmp0_$receiver, tmp3_top, tmp2_right, null, tmp1_left, 4, null), IdsMobile_WORK_getInstance()._id_1);
+      Column$composable(tmp_0, null, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_11_0, $composer_0, 24576, 14);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
     var tmp0_safe_receiver = $composer_0.endRestartGroup_0_k$();
@@ -54183,7 +54338,7 @@
   }
   function WorkExperienceItem$composable_0(position, company, period, responsible, tasks, $composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-1154297575);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-1154297215);
     var $dirty = $changed;
     if (($changed & 14) === 0)
       $dirty = $dirty | ($composer_0.changed_wi7j7l_k$(position) ? 4 : 2);
@@ -54197,11 +54352,12 @@
       $dirty = $dirty | ($composer_0.changed_wi7j7l_k$(tasks) ? 16384 : 8192);
     if (!(($dirty & 46811 ^ 9362) === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp = Companion_getInstance_38();
-      var tmp_0 = fillMaxWidth$default(tmp, null, 1, null);
-      var tmp_1 = _get_px_(20);
-      var tmp_2 = padding$default(tmp_0, null, null, tmp_1, null, 11, null);
-      var tmp_3 = $composer_0;
-      Box$composable(tmp_2, null, null, composableLambda(tmp_3, -819889698, true, _no_name_provided_$factory_440(position, $dirty, company, period, responsible, tasks)), $composer_0, 3072, 6);
+      var tmp0_$receiver = width$default(tmp, widthScreen, null, 2, null);
+      var tmp1_bottom = _get_px_(20);
+      var tmp2_right = PADDING_0;
+      var tmp_0 = padding$default(tmp0_$receiver, null, tmp2_right, tmp1_bottom, null, 9, null);
+      var tmp_1 = $composer_0;
+      Box$composable(tmp_0, null, null, composableLambda(tmp_1, -819902909, true, _no_name_provided_$factory_440(position, $dirty, company, period, responsible, tasks)), $composer_0, 3072, 6);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
     var tmp0_safe_receiver = $composer_0.endRestartGroup_0_k$();
@@ -54213,13 +54369,13 @@
   }
   function EducationLangInterests$composable_0($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-65783346);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-65782965);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp0_$receiver = Companion_getInstance_38();
       var tmp1_left = PADDING_0;
       var tmp2_right = PADDING_0;
       var tmp = padding$default(tmp0_$receiver, null, tmp2_right, null, tmp1_left, 5, null);
-      var tmp_0 = fillMaxWidth$default(tmp, null, 1, null);
+      var tmp_0 = width$default(tmp, widthScreen, null, 2, null);
       Column$composable(tmp_0, null, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_12_0, $composer_0, 24576, 14);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
@@ -54232,10 +54388,10 @@
   }
   function Education$composable_0($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-245756);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-245371);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp = Companion_getInstance_38();
-      var tmp_0 = fillMaxWidth$default(tmp, null, 1, null);
+      var tmp_0 = width$default(tmp, widthScreen, null, 2, null);
       var tmp_1 = _get_px_(50);
       var tmp_2 = id(padding$default(tmp_0, tmp_1, null, null, null, 14, null), IdsMobile_EDUCATION_getInstance()._id_1);
       Box$composable(tmp_2, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_14_0, $composer_0, 3072, 6);
@@ -54250,10 +54406,10 @@
   }
   function Language$composable_0($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(993561841);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(993562230);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp = Companion_getInstance_38();
-      var tmp_0 = fillMaxWidth$default(tmp, null, 1, null);
+      var tmp_0 = width$default(tmp, widthScreen, null, 2, null);
       var tmp_1 = _get_px_(50);
       var tmp_2 = id(padding$default(tmp_0, tmp_1, null, null, null, 14, null), IdsMobile_LANGUAGE_getInstance()._id_1);
       Box$composable(tmp_2, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_16_0, $composer_0, 3072, 6);
@@ -54268,10 +54424,10 @@
   }
   function Interests$composable_0($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-1302470978);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-1302470585);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp = Companion_getInstance_38();
-      var tmp_0 = fillMaxWidth$default(tmp, null, 1, null);
+      var tmp_0 = width$default(tmp, widthScreen, null, 2, null);
       var tmp_1 = _get_px_(50);
       var tmp_2 = id(padding$default(tmp_0, tmp_1, null, null, null, 14, null), IdsMobile_INTERESTS_getInstance()._id_1);
       Box$composable(tmp_2, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_19_0, $composer_0, 3072, 6);
@@ -54286,14 +54442,15 @@
   }
   function Projects$composable_0($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(1453750988);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(1453751385);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp0_$receiver = Companion_getInstance_38();
       var tmp1_left = PADDING_0;
       var tmp2_right = PADDING_0;
       var tmp3_top = _get_px_(50);
-      var tmp = id(padding$default(tmp0_$receiver, tmp3_top, tmp2_right, null, tmp1_left, 4, null), IdsMobile_PROJECTS_getInstance()._id_1);
-      Column$composable(tmp, null, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_21_0, $composer_0, 24576, 14);
+      var tmp = padding$default(tmp0_$receiver, tmp3_top, tmp2_right, null, tmp1_left, 4, null);
+      var tmp_0 = id(width$default(tmp, widthScreen, null, 2, null), IdsMobile_PROJECTS_getInstance()._id_1);
+      Column$composable(tmp_0, null, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_21_0, $composer_0, 24576, 14);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
     var tmp0_safe_receiver = $composer_0.endRestartGroup_0_k$();
@@ -54305,17 +54462,19 @@
   }
   function Project$composable_0(enum_0, $composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(656469017);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(656469437);
     var $dirty = $changed;
     if (($changed & 14) === 0)
       $dirty = $dirty | ($composer_0.changed_wi7j7l_k$(enum_0) ? 4 : 2);
     if (!(($dirty & 11 ^ 2) === 0) ? true : !$composer_0._get_skipping__0_k$()) {
-      var tmp = Companion_getInstance_38();
-      var tmp_0 = _get_px_(10);
-      var tmp_1 = _get_px_(10);
-      var tmp_2 = padding$default(tmp, tmp_0, null, tmp_1, null, 10, null);
-      var tmp_3 = $composer_0;
-      Column$composable(tmp_2, null, null, null, composableLambda(tmp_3, -819910664, true, _no_name_provided_$factory_447(enum_0)), $composer_0, 24576, 14);
+      var tmp0_$receiver = Companion_getInstance_38();
+      var tmp1_top = _get_px_(10);
+      var tmp2_bottom = _get_px_(10);
+      var tmp3_right = PADDING_0;
+      var tmp = padding$default(tmp0_$receiver, tmp1_top, tmp3_right, tmp2_bottom, null, 8, null);
+      var tmp_0 = width$default(tmp, widthScreen, null, 2, null);
+      var tmp_1 = $composer_0;
+      Column$composable(tmp_0, null, null, null, composableLambda(tmp_1, -819911248, true, _no_name_provided_$factory_447(enum_0)), $composer_0, 24576, 14);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
     var tmp0_safe_receiver = $composer_0.endRestartGroup_0_k$();
@@ -54327,14 +54486,14 @@
   }
   function Contacts$composable_0($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(104386916);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(104387566);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp0_$receiver = Companion_getInstance_38();
       var tmp1_top = PADDING_0;
       var tmp2_left = PADDING_0;
       var tmp3_right = PADDING_0;
       var tmp = padding$default(tmp0_$receiver, tmp1_top, tmp3_right, null, tmp2_left, 4, null);
-      var tmp_0 = id(fillMaxWidth$default(tmp, null, 1, null), IdsMobile_CONTACTS_getInstance()._id_1);
+      var tmp_0 = id(width$default(tmp, widthScreen, null, 2, null), IdsMobile_CONTACTS_getInstance()._id_1);
       Column$composable(tmp_0, null, null, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_23_0, $composer_0, 24576, 14);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
@@ -54347,7 +54506,7 @@
   }
   function ContactItem$composable_0(enum_0, $composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(2086201124);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(2086201782);
     var $dirty = $changed;
     if (($changed & 14) === 0)
       $dirty = $dirty | ($composer_0.changed_wi7j7l_k$(enum_0) ? 4 : 2);
@@ -54361,7 +54520,7 @@
       var tmp_2 = _get_px_(80);
       var tmp_3 = height$default(tmp_1, tmp_2, null, 2, null);
       var tmp_4 = $composer_0;
-      Link$composable_0(enum_0._link_1, '', tmp_3, null, null, null, false, composableLambda(tmp_4, -819910261, true, _no_name_provided_$factory_450(enum_0)), $composer_0, 12582960, 120);
+      Link$composable_0(enum_0._link_1, '', tmp_3, null, null, null, false, composableLambda(tmp_4, -819906791, true, _no_name_provided_$factory_450(enum_0)), $composer_0, 12582960, 120);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
     var tmp0_safe_receiver = $composer_0.endRestartGroup_0_k$();
@@ -54373,13 +54532,13 @@
   }
   function Footer$composable($composer, $changed) {
     var $composer_0 = $composer;
-    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-92930528);
+    $composer_0 = $composer_0.startRestartGroup_ha5a7z_k$(-92929870);
     if (!($changed === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp = Companion_getInstance_38();
       var tmp_0 = _get_px_(80);
       var tmp_1 = _get_px_(40);
       var tmp_2 = padding$default(tmp, tmp_0, null, tmp_1, null, 10, null);
-      var tmp_3 = fillMaxWidth$default(tmp_2, null, 1, null);
+      var tmp_3 = width$default(tmp_2, widthScreen, null, 2, null);
       var tmp_4 = Companion_getInstance_37()._Center_0;
       Box$composable(tmp_3, tmp_4, null, ComposableSingletons$IndexMobileKt_getInstance()._lambda_25_0, $composer_0, 3072, 4);
     } else
@@ -54478,7 +54637,7 @@
     var $composer_0 = $composer;
     if (!(($changed & 81 ^ 16) === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp = Companion_getInstance_38();
-      var tmp_0 = fontWeight_0(fontFamily_0(fontSize_0(textAlign_0(fillMaxWidth$default(tmp, null, 1, null), Companion_getInstance_32()._get_Center__0_k$()), _get_px_(16)), [Fonts_ROBOTO_LIGHT_getInstance()._text_0]), new IntFontWeight(600));
+      var tmp_0 = fontWeight_0(fontFamily_0(fontSize_0(textAlign_0(width$default(tmp, widthScreen, null, 2, null), Companion_getInstance_32()._get_Center__0_k$()), _get_px_(16)), [Fonts_ROBOTO_LIGHT_getInstance()._text_0]), new IntFontWeight(600));
       var tmp_1 = _get_px_(this._$top_1._v);
       var tmp_2 = _get_px_(10);
       var tmp_3 = padding$default(tmp_0, tmp_1, null, tmp_2, null, 10, null);
@@ -54622,7 +54781,7 @@
     var $composer_0 = $composer;
     if (!(($changed & 81 ^ 16) === 0) ? true : !$composer_0._get_skipping__0_k$()) {
       var tmp = $composer_0;
-      Column$composable(null, null, null, null, composableLambda(tmp, -819889681, true, _no_name_provided_$factory_453(this._$position_3, this._$$dirty_16, this._$company_3, this._$period_3, this._$responsible_3, this._$tasks_3)), $composer_0, 24576, 15);
+      Column$composable(null, null, null, null, composableLambda(tmp, -819902896, true, _no_name_provided_$factory_453(this._$position_3, this._$$dirty_16, this._$company_3, this._$period_3, this._$responsible_3, this._$tasks_3)), $composer_0, 24576, 15);
     } else
       $composer_0.skipToGroupEnd_sv8swh_k$();
   };
@@ -54766,28 +54925,30 @@
   _no_name_provided__489.prototype.invoke_jpel0v_k$ = function ($this$Box, $composer, $changed) {
     var $composer_0 = $composer;
     if (!(($changed & 81 ^ 16) === 0) ? true : !$composer_0._get_skipping__0_k$()) {
-      var size_1 = window.innerWidth - 56 | 0;
-      var tmp = size_0(Companion_getInstance_38(), _get_px_(size_1));
+      var tmp0_safe_receiver = document.body;
+      var tmp1_elvis_lhs = tmp0_safe_receiver == null ? null : tmp0_safe_receiver.clientWidth;
+      var size_1 = (tmp1_elvis_lhs == null ? 390 : tmp1_elvis_lhs) - 56 | 0;
+      var tmp = borderRadius_0(size_0(Companion_getInstance_38(), _get_px_(size_1)), _get_px_(20));
       Image$composable('background_image.svg', null, tmp, false, null, $composer_0, 6, 26);
       if (!(this._$enum_9._image == null)) {
-        $composer_0.startReplaceableGroup_majfzk_k$(1201447226);
+        $composer_0.startReplaceableGroup_majfzk_k$(1201447849);
         var tmp_0 = size_0(Companion_getInstance_38(), _get_px_(size_1));
-        var tmp_1 = _get_px_(size_1 / 2 | 0);
+        var tmp_1 = _get_px_(size_1 / 2.2);
         var tmp_2 = width$default(tmp_0, tmp_1, null, 2, null);
         Image$composable(this._$enum_9._image, null, tmp_2, false, null, $composer_0, 0, 26);
         $composer_0.endReplaceableGroup_sv8swh_k$();
       } else if (!(this._$enum_9._textIfImageNull == null)) {
-        $composer_0.startReplaceableGroup_majfzk_k$(1201447415);
+        $composer_0.startReplaceableGroup_majfzk_k$(1201448040);
         var tmp_3 = color_1(Companion_getInstance_38(), getColor(2697513));
         var tmp_4 = _get_px_(size_1);
-        var tmp0_$receiver = fontSize_0(width$default(tmp_3, tmp_4, null, 2, null), _get_px_(40));
-        var tmp1_left = _get_px_(30);
-        var tmp2_right = _get_px_(30);
-        var tmp_5 = textAlign_0(fontFamily_0(padding$default(tmp0_$receiver, null, tmp2_right, null, tmp1_left, 5, null), [Fonts_ROBOTO_getInstance()._text_0]), Companion_getInstance_32()._get_Center__0_k$());
+        var tmp2_$receiver = fontSize_0(width$default(tmp_3, tmp_4, null, 2, null), _get_px_(40));
+        var tmp3_left = _get_px_(30);
+        var tmp4_right = _get_px_(30);
+        var tmp_5 = textAlign_0(fontFamily_0(padding$default(tmp2_$receiver, null, tmp4_right, null, tmp3_left, 5, null), [Fonts_ROBOTO_getInstance()._text_0]), Companion_getInstance_32()._get_Center__0_k$());
         Text$composable_0(this._$enum_9._textIfImageNull, tmp_5, null, $composer_0, 0, 4);
         $composer_0.endReplaceableGroup_sv8swh_k$();
       } else {
-        $composer_0.startReplaceableGroup_majfzk_k$(1201447836);
+        $composer_0.startReplaceableGroup_majfzk_k$(1201448461);
         $composer_0.endReplaceableGroup_sv8swh_k$();
       }
     } else
@@ -54809,12 +54970,12 @@
   _no_name_provided__490.prototype.invoke_9s02y_k$ = function ($this$Column, $composer, $changed) {
     var $composer_0 = $composer;
     if (!(($changed & 81 ^ 16) === 0) ? true : !$composer_0._get_skipping__0_k$()) {
-      var tmp = fontFamily_0(fontSize_0(color_1(Companion_getInstance_38(), getColor(2697513)), _get_px_(24)), [Fonts_ROBOTO_getInstance()._text_0]);
-      var tmp_0 = fillMaxWidth$default(tmp, null, 1, null);
+      var tmp = fontWeight_0(fontFamily_0(fontSize_0(color_1(Companion_getInstance_38(), getColor(2697513)), _get_px_(24)), [Fonts_ROBOTO_getInstance()._text_0]), new IntFontWeight(800));
+      var tmp_0 = width$default(tmp, widthScreen, null, 2, null);
       var tmp_1 = _get_px_(1);
       var tmp_2 = padding$default(tmp_0, tmp_1, null, null, null, 14, null);
       Text$composable_0(this._$enum_10._appName, tmp_2, null, $composer_0, 0, 4);
-      var tmp_3 = fontFamily_0(fontSize_0(color_1(Companion_getInstance_38(), getColor(2697513)), _get_px_(18)), [Fonts_ROBOTO_getInstance()._text_0]);
+      var tmp_3 = fontFamily_0(fontWeight_0(fontSize_0(color_1(Companion_getInstance_38(), getColor(2697513)), _get_px_(18)), new IntFontWeight(500)), [Fonts_ROBOTO_getInstance()._text_0]);
       var tmp_4 = _get_px_(5);
       var tmp_5 = padding$default(tmp_3, tmp_4, null, null, null, 14, null);
       Text$composable_0(this._$enum_10._date, tmp_5, null, $composer_0, 0, 4);
@@ -54823,26 +54984,27 @@
       var tmp_8 = _get_px_(20);
       var tmp_9 = padding$default(tmp_6, tmp_7, null, tmp_8, null, 10, null);
       var tmp_10 = $composer_0;
-      Row$composable(tmp_9, null, null, null, composableLambda(tmp_10, -819911345, true, _no_name_provided_$factory_454(this._$enum_10)), $composer_0, 24576, 14);
+      Row$composable(tmp_9, null, null, null, composableLambda(tmp_10, -819911837, true, _no_name_provided_$factory_454(this._$enum_10)), $composer_0, 24576, 14);
       var tmp_11 = Companion_getInstance_38();
-      var tmp_12 = fillMaxWidth$default(tmp_11, null, 1, null);
-      var tmp_13 = Companion_getInstance_37()._Center_0;
-      var tmp_14 = $composer_0;
-      Box$composable(tmp_12, tmp_13, null, composableLambda(tmp_14, -819912177, true, _no_name_provided_$factory_455(this._$enum_10)), $composer_0, 3072, 4);
-      var tmp_15 = fontFamily_0(fontSize_0(color_1(Companion_getInstance_38(), getColor(2697513)), _get_px_(16)), [Fonts_ROBOTO_getInstance()._text_0]);
-      var tmp_16 = fillMaxWidth$default(tmp_15, null, 1, null);
-      var tmp_17 = _get_px_(20);
-      var tmp_18 = padding$default(tmp_16, tmp_17, null, null, null, 14, null);
-      Text$composable_0(this._$enum_10._description, tmp_18, null, $composer_0, 0, 4);
+      var tmp_12 = width$default(tmp_11, widthScreen, null, 2, null);
+      var tmp_13 = padding$default(tmp_12, null, PADDING_0, null, null, 13, null);
+      var tmp_14 = Companion_getInstance_37()._Center_0;
+      var tmp_15 = $composer_0;
+      Box$composable(tmp_13, tmp_14, null, composableLambda(tmp_15, -819912636, true, _no_name_provided_$factory_455(this._$enum_10)), $composer_0, 3072, 4);
+      var tmp_16 = fontFamily_0(fontSize_0(color_1(Companion_getInstance_38(), getColor(2697513)), _get_px_(16)), [Fonts_ROBOTO_getInstance()._text_0]);
+      var tmp_17 = width$default(tmp_16, widthScreen, null, 2, null);
+      var tmp_18 = _get_px_(20);
+      var tmp_19 = padding$default(tmp_17, tmp_18, PADDING_0, null, null, 12, null);
+      Text$composable_0(this._$enum_10._description, tmp_19, null, $composer_0, 0, 4);
       if (!(this._$enum_10._link_0 == null)) {
-        var tmp_19 = Strings_LinkToProject_getInstance()._text;
-        var tmp_20 = fontSize_0(color_1(Companion_getInstance_38(), getColor(2697513)), _get_px_(20));
-        var tmp_21 = _get_px_(10);
-        var tmp_22 = fontFamily_0(padding$default(tmp_20, tmp_21, null, null, null, 14, null), [Fonts_ROBOTO_getInstance()._text_0]);
-        var tmp_23 = fillMaxWidth$default(tmp_22, null, 1, null);
-        var tmp_24 = _get_px_(40);
-        var tmp_25 = height$default(tmp_23, tmp_24, null, 2, null);
-        Link$composable_0(this._$enum_10._link_0, tmp_19, tmp_25, null, null, null, false, null, $composer_0, 48, 248);
+        var tmp_20 = Strings_LinkToProject_getInstance()._text;
+        var tmp_21 = fontSize_0(color_1(Companion_getInstance_38(), getColor(2697513)), _get_px_(20));
+        var tmp_22 = _get_px_(10);
+        var tmp_23 = fontFamily_0(padding$default(tmp_21, tmp_22, null, null, null, 14, null), [Fonts_ROBOTO_getInstance()._text_0]);
+        var tmp_24 = width$default(tmp_23, widthScreen, null, 2, null);
+        var tmp_25 = _get_px_(40);
+        var tmp_26 = height$default(tmp_24, tmp_25, null, 2, null);
+        Link$composable_0(this._$enum_10._link_0, tmp_20, tmp_26, null, null, null, false, null, $composer_0, 48, 248);
       }} else
       $composer_0.skipToGroupEnd_sv8swh_k$();
   };
@@ -55374,6 +55536,11 @@
       return Unit_getInstance();
     };
   }
+  function widthScreen$init$() {
+    var tmp0_safe_receiver = document.body;
+    var tmp1_elvis_lhs = tmp0_safe_receiver == null ? null : tmp0_safe_receiver.clientWidth;
+    return _get_px_(tmp1_elvis_lhs == null ? 400 : tmp1_elvis_lhs);
+  }
   CombinedContext.prototype.plus_d7pszg_k$ = CoroutineContext.prototype.plus_d7pszg_k$;
   AbstractCoroutineContextElement.prototype.get_9uvjra_k$ = Element_0.prototype.get_9uvjra_k$;
   AbstractCoroutineContextElement.prototype.fold_cq605b_k$ = Element_0.prototype.fold_cq605b_k$;
@@ -55539,6 +55706,7 @@
   DefaultStyleSheet.prototype.returnHoverSelector = SelectorsScope.prototype.returnHoverSelector;
   DefaultStyleSheet.prototype._get_hover__0_k$ = SelectorsScope.prototype._get_hover__0_k$;
   _stableSortingIsSupported = null;
+  output = output$init$();
   functionClasses = functionClasses$init$();
   buf = new ArrayBuffer(8);
   bufFloat64 = bufFloat64$init$();
@@ -55710,7 +55878,7 @@
   PADDING = _get_px_(135);
   STACK_TEXT_SIZE = 18;
   PADDING_0 = _get_px_(28);
-  widthScreen = _get_px_(window.innerWidth);
+  widthScreen = widthScreen$init$();
   isShowMenu$delegate = mutableStateOf$default(false, null, 2, null);
   var $kotlinx = _.kotlinx || (_.kotlinx = {});
   var $kotlinx$atomicfu = $kotlinx.atomicfu || ($kotlinx.atomicfu = {});
