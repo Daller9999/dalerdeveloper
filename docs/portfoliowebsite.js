@@ -49740,7 +49740,7 @@
     Strings_InterestsCoding_instance = new Strings('InterestsCoding', 46, 'Coding');
     Strings_InterestsMakingGames_instance = new Strings('InterestsMakingGames', 47, 'Making games');
     Strings_DownloadResume_instance = new Strings('DownloadResume', 48, 'Download CV');
-    Strings_VISA_AND_LOCATION_instance = new Strings('VISA_AND_LOCATION', 49, "I am resident of Tajikistan and I need H1B or L1 visa sponsorship.\nI don't have any visa right now.");
+    Strings_VISA_AND_LOCATION_instance = new Strings('VISA_AND_LOCATION', 49, "I am resident of Tajikistan and I need H1B visa sponsorship.\nI don't have any visa right now.");
   }
   function Strings(name, ordinal, text) {
     Enum.call(this, name, ordinal);
