@@ -50281,7 +50281,7 @@
     Strings_InterestsCoding_instance = new Strings('InterestsCoding', 46, 'Coding');
     Strings_InterestsMakingGames_instance = new Strings('InterestsMakingGames', 47, 'Making games');
     Strings_DownloadResume_instance = new Strings('DownloadResume', 48, 'Download CV');
-    Strings_VISA_AND_LOCATION_instance = new Strings('VISA_AND_LOCATION', 49, "I am resident of Tajikistan and I need H1B visa sponsorship.\nI don't have any visa right now.");
+    Strings_VISA_AND_LOCATION_instance = new Strings('VISA_AND_LOCATION', 49, "I need H1B visa sponsorship. I don't have any visa right now.\n Currently I am in Tajikistan");
     Strings_Location_instance = new Strings('Location', 50, 'Dushanbe, Tajikistan');
     Strings_Mobile_instance = new Strings('Mobile', 51, '+1 315 883 2721');
   }
